@@ -1,19 +1,21 @@
 import React, { useState } from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 import "./App.css";
 import { Layout } from "antd";
 import MainMenu from "./components/MainMenu";
 import NavBar from "./components/NavBar";
 import SideBar from "./components/SideBar";
-import AppDescription from "./components/AppDescription";
+import DescriptionView from "./components/Views/DescriptionView";
+import AppView from "./components/Views/AppView";
+import ResourcesView from "./components/Views/ResourcesView";
+
 function App() {
   const topics = ["Description", "App", "Resources"];
-  const [contentIndex, setContentIndex] = useState(0);
+
   const [selectedKey, setSelectedKey] = useState("0");
   const changeSelectedKey = (event) => {
     const key = event.key;
     setSelectedKey(key);
-    setContentIndex(+key);
   };
   const Menu = (
     <MainMenu
@@ -29,8 +31,13 @@ function App() {
         <Layout>
           <SideBar menu={Menu} />
           <Layout.Content className="content">
-            <h2>{topics[contentIndex]}</h2>
-            <Route path="/description" component={AppDescription} />
+            <Route exact path="/">
+              {/* changing the default route to redirect to the first route in the menu */}
+              <Redirect to={topics[0]} />
+            </Route>
+            <Route path="/description" component={DescriptionView} />
+            <Route path="/app" component={AppView} />
+            <Route path="/resources" component={ResourcesView} />
           </Layout.Content>
         </Layout>
       </Router>
