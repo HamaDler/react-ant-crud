@@ -1,11 +1,12 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { Menu } from "antd";
 const MainMenu = ({ topics, selectedKey, changeSelectedKey }) => {
   const styledTopics = [];
   topics.forEach((topic, index) =>
     styledTopics.push(
       <Menu.Item key={index} onClick={changeSelectedKey}>
-        {topic}
+        <Link to={`/${topic.toLowerCase()}`}>{topic}</Link>
       </Menu.Item>
     )
   );
