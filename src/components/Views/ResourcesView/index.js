@@ -18,7 +18,7 @@ export default function index() {
     <div>
       <Title> Resources View</Title>
       <Paragraph style={{ marginBottom: "4rem" }}>
-        There are the resources that were made use of in the development of this
+        These are the resources that were made use of in the development of this
         example app
       </Paragraph>
       <List
