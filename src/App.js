@@ -5,9 +5,9 @@ import { Layout } from "antd";
 import MainMenu from "./components/MainMenu";
 import NavBar from "./components/NavBar";
 import SideBar from "./components/SideBar";
-import DescriptionView from "./components/Views/DescriptionView";
-import AppView from "./components/Views/AppView";
-import ResourcesView from "./components/Views/ResourcesView";
+import DescriptionView from "./Views/DescriptionView";
+import AppView from "./Views/AppView";
+import ResourcesView from "./Views/ResourcesView";
 
 function App() {
   const topics = ["Description", "App", "Resources"];
