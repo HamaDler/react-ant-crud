@@ -7,36 +7,51 @@ const { Option } = Select;
 class UserList extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      error: null,
+      isLoaded: false,
+      posts: [],
+    };
+
+    this.handleChange = this.handleChange.bind(this);
+    this.axiosCall = this.axiosCall.bind(this);
   }
 
-  handleChange(value) {
-    console.log(`selected ${value}`);
+  axiosCall(userId) {
+    axios
+      .get(`https://jsonplaceholder.typicode.com/posts/${userId}`)
+      .then((response) => {
+        this.setState({
+          isLoaded: true,
+          posts: response.data,
+        });
+        console.log(response.data);
+      });
   }
 
   componentDidMount() {
     // send HTTP request
     // save it to the state
-    axios
-      .get("https://jsonplaceholder.typicode.com/posts/1")
-      .then((response) => {
-        this.setState(response.data);
-        console.log(response.data);
-      });
+    this.axiosCall(1);
     console.log("user list component mounted");
+  }
+
+  handleChange(userId) {
+    console.log(userId);
+    this.axiosCall(userId);
   }
 
   render() {
     return (
       <>
         <Select
-          defaultValue="lucy"
+          defaultValue="Pick User"
           style={{ width: 120 }}
           onChange={this.handleChange}
         >
-          <Option value="jack">Jack</Option>
-          <Option value="lucy">Lucy</Option>
-          <Option value="Yiminghe">yiminghe</Option>
+          <Option value="1">User with ID 1</Option>
+          <Option value="2">User with ID 2</Option>
+          <Option value="3">User with ID 3</Option>
         </Select>
 
         {/* 
@@ -58,7 +73,7 @@ class UserList extends Component {
           <Col span={24}>
             <List
               itemLayout="horizontal"
-              dataSource={[this.state]}
+              dataSource={[this.state.posts]}
               renderItem={(post) => (
                 <>
                   <List.Item
