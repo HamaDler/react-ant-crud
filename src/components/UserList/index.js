@@ -55,57 +55,51 @@ class UserList extends Component {
           <Option value="3">User with ID 3</Option>
         </Select>
 
-        {/* 
-          <Form.Item
-            name="remember"
-            valuePropName="checked"
-            wrapperCol={{ offset: 8, span: 16 }}
-          >
-            <Checkbox>Remember me</Checkbox>
-          </Form.Item>
-
-          <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-            <Button type="primary" htmlType="submit">
-              Submit
-            </Button>
-          </Form.Item> */}
-
-        <Row>
-          <Col span={24}>
-            {this.state.isLoading ? (
-              <Spin tip="Loading..." size="large" style={{ height: "50%" }}>
-                <div style={{ background: "#f0f2f5", height: 500, margin: 24 }}>
-                  Loading
-                </div>
-              </Spin>
-            ) : (
-              <List
-                itemLayout="horizontal"
-                dataSource={[this.state.posts]}
-                renderItem={(post) => (
-                  <>
-                    <List.Item
-                      actions={[
-                        <Button type="primary" key="list-loadmore-edit">
-                          Edit
-                        </Button>,
-                        <Button danger key="list-loadmore-edit">
-                          Delete
-                        </Button>,
-                      ]}
+        {
+          /*  ONLY RENDER POSTS LIST IF USER POSTS HAVE BEEN FETCHED */
+          this.state.posts.length !== 0 && (
+            <Row>
+              <Col span={24}>
+                {this.state.isLoading ? (
+                  <Spin tip="Loading..." size="large" style={{ height: "50%" }}>
+                    <div
+                      style={{ background: "#f0f2f5", height: 500, margin: 24 }}
                     >
-                      <List.Item.Meta
-                        title={<a href="https://ant.design">{post.title}</a>}
-                        description={post.body}
-                      />
-                    </List.Item>
-                    <Divider></Divider>
-                  </>
+                      Loading
+                    </div>
+                  </Spin>
+                ) : (
+                  <List
+                    itemLayout="horizontal"
+                    dataSource={[this.state.posts]}
+                    renderItem={(post) => (
+                      <>
+                        <List.Item
+                          actions={[
+                            <Button type="primary" key="list-loadmore-edit">
+                              Edit
+                            </Button>,
+                            <Button danger key="list-loadmore-edit">
+                              Delete
+                            </Button>,
+                          ]}
+                        >
+                          <List.Item.Meta
+                            title={
+                              <a href="https://ant.design">{post.title}</a>
+                            }
+                            description={post.body}
+                          />
+                        </List.Item>
+                        <Divider></Divider>
+                      </>
+                    )}
+                  />
                 )}
-              />
-            )}
-          </Col>
-        </Row>
+              </Col>
+            </Row>
+          )
+        }
       </>
     );
   }
