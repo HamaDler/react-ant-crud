@@ -11,6 +11,7 @@ import {
   Input,
   Typography,
   Form,
+  message,
 } from "antd";
 import { PlusCircleOutlined } from "@ant-design/icons";
 
@@ -180,17 +181,6 @@ class UserList extends Component {
                   Add a new post
                 </Button>
 
-                {this.state.isButtonLoading && (
-                  <Button
-                    type="primary"
-                    danger
-                    key="list-loadmore-edit"
-                    loading
-                    style={{ float: "right" }}
-                  >
-                    Deleting
-                  </Button>
-                )}
                 {this.state.isAddingNewPost && (
                   <Form
                     name="basic"
@@ -246,9 +236,11 @@ class UserList extends Component {
                             <Button
                               danger
                               key="list-loadmore-edit"
+                              loading={this.state.isButtonLoading}
+                              style={{ width: "100px" }}
                               onClick={() => this.handleDeletePost(post.id)}
                             >
-                              Delete
+                              {this.state.isButtonLoading ? "" : "Delete"}
                             </Button>,
                           ]}
                         >
