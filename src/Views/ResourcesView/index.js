@@ -5,12 +5,28 @@ const { Title, Paragraph } = Typography;
 
 const data = [
   {
+    title: "React ",
+    link: "https://reactjs.org/docs/getting-started.html",
+  },
+  {
     title: "Ant Design Documentations",
     link: "https://ant.design/docs/react/introduce",
   },
   {
-    title: "Redirect Default Route",
-    link: "https://reactrouter.com/web/api/Redirect",
+    title: "React Route",
+    link: "https://reactrouter.com/web/guides/quick-start",
+  },
+  {
+    title: "Axios",
+    link: "https://axios-http.com/docs/intro",
+  },
+  {
+    title: "JsonPlaceholder mock API",
+    link: "https://jsonplaceholder.typicode.com/guide/",
+  },
+  {
+    title: "Stack Overflow",
+    link: "https://stackoverflow.com/",
   },
 ];
 export default function index() {

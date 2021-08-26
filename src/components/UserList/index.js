@@ -12,6 +12,7 @@ import {
   Typography,
   Form,
   Empty,
+  Modal,
 } from "antd";
 import { PlusCircleOutlined } from "@ant-design/icons";
 
@@ -27,6 +28,7 @@ class UserList extends Component {
       isLoading: false,
       isAddingNewPost: false,
       isButtonLoading: false,
+      isModalVisible: false,
       users: [],
       posts: [],
       selectedUserId: 1,
@@ -43,6 +45,9 @@ class UserList extends Component {
     this.handlePostBodyChange = this.handlePostBodyChange.bind(this);
     this.getUsers = this.getUsers.bind(this);
     this.handleDeletePost = this.handleDeletePost.bind(this);
+    this.showModal = this.showModal.bind(this);
+    this.hideModal = this.hideModal.bind(this);
+    this.handleEditPost = this.handleEditPost.bind(this);
   }
 
   componentDidMount() {
@@ -148,6 +153,17 @@ class UserList extends Component {
       });
   }
 
+  showModal() {
+    this.setState({ isModalVisible: true });
+  }
+
+  hideModal() {
+    this.setState({ isModalVisible: false });
+  }
+  handleEditPost() {
+    console.log("modal edit confirm pressed");
+  }
+
   render() {
     const users = this.state.users;
     return (
@@ -179,6 +195,34 @@ class UserList extends Component {
                 >
                   Add a new post
                 </Button>
+                <Modal
+                  title="Basic Modal"
+                  visible={this.state.isModalVisible}
+                  onOk={this.handleEditPost}
+                  onCancel={this.hideModal}
+                >
+                  <Form
+                    name="basic"
+                    initialValues={{ remember: true }}
+                    onFinish={this.handleAddNewPostSubmit}
+                  >
+                    <Form.Item wrapperCol={{ span: 16 }}>
+                      <Input
+                        value="asperiores ea ipsam voluptatibus modi minima quia sint"
+                        placeholder="Post Title"
+                        onChange={this.handlePostTitleChange}
+                      />
+                    </Form.Item>
+                    <Form.Item wrapperCol={{ span: 16 }}>
+                      <TextArea
+                        value="repellat aliquid praesentium dolorem quo sed totam minus non itaque nihil labore molestiae sunt dolor eveniet hic recusandae veniam tempora et tenetur expedita sunt"
+                        rows={4}
+                        placeholder="Post Body"
+                        onChange={this.handlePostBodyChange}
+                      />
+                    </Form.Item>
+                  </Form>
+                </Modal>
 
                 {this.state.isAddingNewPost && (
                   <Form
@@ -229,7 +273,11 @@ class UserList extends Component {
                       <>
                         <List.Item
                           actions={[
-                            <Button type="primary" key="list-loadmore-edit">
+                            <Button
+                              type="primary"
+                              key="list-loadmore-edit"
+                              onClick={this.showModal}
+                            >
                               Edit
                             </Button>,
                             <Button
