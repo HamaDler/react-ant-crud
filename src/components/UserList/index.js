@@ -43,9 +43,11 @@ class UserList extends Component {
   }
 
   componentDidMount() {
+    // GETTING LIST OF OUR USERS AS THE COMPONENT MOUNTS
     this.getUsers();
   }
 
+  // MAKE AXIOS GET CALL TO A MOCK API TO GET USERS AND STORE THEM IN STATE
   getUsers() {
     axios
       .get(`https://jsonplaceholder.typicode.com/users/`)
@@ -58,7 +60,7 @@ class UserList extends Component {
       });
   }
 
-  // Function that takes in User ID, makes an api call to get posts for that user and updates the state
+  // GET USER POSTS
   getUserPosts(userId) {
     this.setState({ isLoading: true });
     axios
@@ -72,18 +74,23 @@ class UserList extends Component {
       });
   }
 
+  // WHEN A USER IS SELECTED
   handleUserSelect(userId) {
     this.getUserPosts(userId);
     this.setState({ selectedUserId: userId });
   }
 
+  // WHEN ADD NEW POST BUTTON IS PRESSED
   handleAddNewCollapse() {
     this.setState({ isAddingNewPost: true });
   }
+
+  // WHEN CANCEL NEW POST BUTTON IS PRESSED
   handleCancelNewPost() {
     this.setState({ isAddingNewPost: false });
   }
 
+  // WHEN ADD NEW POST FORM IS SUBMITTED
   handleAddNewPostSubmit = (event) => {
     this.setState({ isLoading: true });
     axios
@@ -94,7 +101,7 @@ class UserList extends Component {
       })
       .then((res) => {
         console.log(res.data);
-
+        /*  API endpoints can normally return the new user posts object with the new added post, but the mock POST API was only returning what was being submitted, so I had to normally concat it */
         const newReturnedPost = res.data;
         this.setState({ posts: [newReturnedPost, ...this.state.posts] });
         this.setState({ isAddingNewPost: false });
@@ -102,9 +109,11 @@ class UserList extends Component {
       });
   };
 
+  // WHEN USER TYPES IN THE TITLE FOR THE NEW POST TO BE ADDED, STORE IT IN THE STATE
   handlePostTitleChange(e) {
     this.setState({ postTitle: e.target.value });
   }
+  //  WHEN USER TYPES IN THE BODY FOR THE NEW POST TO BE ADDED, STORE IT IN THE STATE
   handlePostBodyChange(e) {
     this.setState({ postBody: e.target.value });
   }
