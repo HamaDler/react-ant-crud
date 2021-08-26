@@ -25,6 +25,7 @@ class UserList extends Component {
       error: null,
       isLoading: false,
       isAddingNewPost: false,
+      isButtonLoading: false,
       users: [],
       posts: [],
       selectedUserId: 1,
@@ -95,6 +96,8 @@ class UserList extends Component {
   // WHEN ADD NEW POST FORM IS SUBMITTED
   handleAddNewPostSubmit = (event) => {
     this.setState({ isLoading: true });
+    this.setState({ isButtonLoading: true });
+
     const selectedUserId = this.state.selectedUserId;
     axios
       .post(
@@ -112,6 +115,7 @@ class UserList extends Component {
         this.setState({ posts: [newReturnedPost, ...this.state.posts] });
         this.setState({ isAddingNewPost: false });
         this.setState({ isLoading: false });
+        this.setState({ isButtonLoading: false });
       });
   };
 
@@ -126,6 +130,7 @@ class UserList extends Component {
 
   //  WHEN USER CLICKS ON DELETE POST BUTTON
   handleDeletePost(postId) {
+    this.setState({ isButtonLoading: true });
     axios
       .delete(`https://jsonplaceholder.typicode.com/posts/${postId}`)
       .then((res) => {
@@ -138,6 +143,7 @@ class UserList extends Component {
         );
 
         this.setState({ posts: newPostsAfterDeleteRequest });
+        this.setState({ isButtonLoading: false });
       });
   }
 
@@ -173,6 +179,18 @@ class UserList extends Component {
                 >
                   Add a new post
                 </Button>
+
+                {this.state.isButtonLoading && (
+                  <Button
+                    type="primary"
+                    danger
+                    key="list-loadmore-edit"
+                    loading
+                    style={{ float: "right" }}
+                  >
+                    Deleting
+                  </Button>
+                )}
                 {this.state.isAddingNewPost && (
                   <Form
                     name="basic"
