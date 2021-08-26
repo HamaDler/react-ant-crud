@@ -40,6 +40,7 @@ class UserList extends Component {
     this.handlePostTitleChange = this.handlePostTitleChange.bind(this);
     this.handlePostBodyChange = this.handlePostBodyChange.bind(this);
     this.getUsers = this.getUsers.bind(this);
+    this.handleDeletePost = this.handleDeletePost.bind(this);
   }
 
   componentDidMount() {
@@ -62,6 +63,7 @@ class UserList extends Component {
 
   // GET USER POSTS
   getUserPosts(userId) {
+    /* We request all posts, we could also filter the posts through query parameter to only get posts for a certain user like this /posts?userId=1  */
     this.setState({ isLoading: true });
     axios
       .get(`https://jsonplaceholder.typicode.com/users/${userId}/posts`)
@@ -93,15 +95,19 @@ class UserList extends Component {
   // WHEN ADD NEW POST FORM IS SUBMITTED
   handleAddNewPostSubmit = (event) => {
     this.setState({ isLoading: true });
+    const selectedUserId = this.state.selectedUserId;
     axios
-      .post(`https://jsonplaceholder.typicode.com/posts`, {
-        title: this.state.postTitle,
-        body: this.state.postBody,
-        userId: this.state.selectedUserId,
-      })
+      .post(
+        `https://jsonplaceholder.typicode.com/users/${selectedUserId}/posts`,
+        {
+          title: this.state.postTitle,
+          body: this.state.postBody,
+          userId: selectedUserId,
+        }
+      )
       .then((res) => {
         console.log(res.data);
-        /*  API endpoints can normally return the new user posts object with the new added post, but the mock POST API was only returning what was being submitted, so I had to normally concat it */
+        /*  API endpoints normally return the new user posts object with the new added post, but the mock POST API was only returning what was being submitted, no data really changes on the server. So I had to manually recreate the effect as if it's from a real server and the changes were submitted*/
         const newReturnedPost = res.data;
         this.setState({ posts: [newReturnedPost, ...this.state.posts] });
         this.setState({ isAddingNewPost: false });
@@ -116,6 +122,23 @@ class UserList extends Component {
   //  WHEN USER TYPES IN THE BODY FOR THE NEW POST TO BE ADDED, STORE IT IN THE STATE
   handlePostBodyChange(e) {
     this.setState({ postBody: e.target.value });
+  }
+
+  //  WHEN USER CLICKS ON DELETE POST BUTTON
+  handleDeletePost(postId) {
+    axios
+      .delete(`https://jsonplaceholder.typicode.com/posts/${postId}`)
+      .then((res) => {
+        console.log(res.data);
+        /* Again, I am recreating the effects of a delete request as if it's from a real server */
+        const postIdToBeDeleted = postId;
+
+        const newPostsAfterDeleteRequest = this.state.posts.filter(
+          (post) => post.id !== postIdToBeDeleted
+        );
+
+        this.setState({ posts: newPostsAfterDeleteRequest });
+      });
   }
 
   render() {
@@ -202,7 +225,11 @@ class UserList extends Component {
                             <Button type="primary" key="list-loadmore-edit">
                               Edit
                             </Button>,
-                            <Button danger key="list-loadmore-edit">
+                            <Button
+                              danger
+                              key="list-loadmore-edit"
+                              onClick={() => this.handleDeletePost(post.id)}
+                            >
                               Delete
                             </Button>,
                           ]}
