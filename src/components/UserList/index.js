@@ -26,19 +26,25 @@ class UserList extends Component {
       isLoading: false,
       isAddingNewPost: false,
       posts: [],
+      selectedUserId: 1,
+      postTitle: "",
+      postBody: "",
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.axiosCall = this.axiosCall.bind(this);
-    this.handleAddNewPost = this.handleAddNewPost.bind(this);
+    this.handleAddNewCollapse = this.handleAddNewCollapse.bind(this);
     this.handleCancelNewPost = this.handleCancelNewPost.bind(this);
+    this.handleAddNewPostSubmit = this.handleAddNewPostSubmit.bind(this);
+    this.handlePostTitleChange = this.handlePostTitleChange.bind(this);
+    this.handlePostBodyChange = this.handlePostBodyChange.bind(this);
   }
 
   // Function that takes in User ID, makes an api call to get posts for that user and updates the state
   axiosCall(userId) {
     this.setState({ isLoading: true });
     axios
-      .get(`https://jsonplaceholder.typicode.com/posts/${userId}`)
+      .get(`https://jsonplaceholder.typicode.com/users/${userId}/posts`)
       .then((response) => {
         this.setState({
           isLoading: false,
@@ -51,23 +57,44 @@ class UserList extends Component {
   componentDidMount() {
     // Populating state with posts from user of ID 1 on component mount
     // this.axiosCall(1);
-    console.log("Posts for the first user list have been loaded");
   }
 
   handleChange(userId) {
     this.axiosCall(userId);
   }
 
-  handleAddNewPost() {
+  handleAddNewCollapse() {
     this.setState({ isAddingNewPost: true });
   }
   handleCancelNewPost() {
     this.setState({ isAddingNewPost: false });
   }
 
+  handleAddNewPostSubmit = (event) => {
+    console.log("handleAddNewPostSubmit function is running");
+
+    axios
+      .post(`https://jsonplaceholder.typicode.com/posts`, {
+        title: this.state.postTitle,
+        body: this.state.postBody,
+        userId: this.state.selectedUserId,
+      })
+      .then((res) => {
+        console.log(res);
+        console.log(res.data);
+      });
+  };
+
+  handlePostTitleChange(e) {
+    this.setState({ postTitle: e.target.value });
+  }
+  handlePostBodyChange(e) {
+    this.setState({ postBody: e.target.value });
+  }
+
   render() {
     return (
-      <>
+      <div className="user-list">
         <Select
           defaultValue="Pick User"
           style={{ width: 140, marginBottom: "4rem" }}
@@ -92,7 +119,7 @@ class UserList extends Component {
                 ) : (
                   <List
                     itemLayout="horizontal"
-                    dataSource={[this.state.posts]}
+                    dataSource={this.state.posts}
                     renderItem={(post) => (
                       <>
                         <Title level={4}>User posts</Title>
@@ -119,17 +146,28 @@ class UserList extends Component {
                           type="dashed"
                           icon={<PlusCircleOutlined />}
                           style={{ marginBottom: "1rem" }}
-                          onClick={this.handleAddNewPost}
+                          onClick={this.handleAddNewCollapse}
                         >
                           Add a new post
                         </Button>
                         {this.state.isAddingNewPost && (
-                          <Form name="basic" initialValues={{ remember: true }}>
+                          <Form
+                            name="basic"
+                            initialValues={{ remember: true }}
+                            onFinish={this.handleAddNewPostSubmit}
+                          >
                             <Form.Item wrapperCol={{ span: 16 }}>
-                              <Input placeholder="Post Title" />
+                              <Input
+                                placeholder="Post Title"
+                                onChange={this.handlePostTitleChange}
+                              />
                             </Form.Item>
                             <Form.Item wrapperCol={{ span: 16 }}>
-                              <TextArea rows={4} placeholder="Post Body" />
+                              <TextArea
+                                rows={4}
+                                placeholder="Post Body"
+                                onChange={this.handlePostBodyChange}
+                              />
                             </Form.Item>
                             <Form.Item wrapperCol={{ span: 16 }}>
                               <Button type="dashed" htmlType="submit">
@@ -155,7 +193,7 @@ class UserList extends Component {
             </Row>
           )
         }
-      </>
+      </div>
     );
   }
 }
