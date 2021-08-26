@@ -61,6 +61,7 @@ export default function index(props) {
             Loading spinner when the data for a user is loading/a post is being
             deleted
           </li>
+          <li>Custom theme setup with ant design</li>
           <li>
             For simplicity purposes and due to the project being a small example
             demo, no state management libraries were used and all the logic was
