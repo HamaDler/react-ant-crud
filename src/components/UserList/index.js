@@ -1,20 +1,42 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { Select, Row, Col, List, Button, Divider, Spin } from "antd";
+import {
+  Select,
+  Row,
+  Col,
+  List,
+  Button,
+  Divider,
+  Spin,
+  Input,
+  Collapse,
+  Typography,
+  Space,
+  Form,
+} from "antd";
+import { PlusCircleOutlined } from "@ant-design/icons";
 
+const { Panel } = Collapse;
 const { Option } = Select;
+const { Title } = Typography;
+const { TextArea } = Input;
 
+function callback(key) {
+  console.log(key);
+}
 class UserList extends Component {
   constructor(props) {
     super(props);
     this.state = {
       error: null,
       isLoading: false,
+      isAddingNewPost: false,
       posts: [],
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.axiosCall = this.axiosCall.bind(this);
+    this.handleAddNewPost = this.handleAddNewPost.bind(this);
   }
 
   // Function that takes in User ID, makes an api call to get posts for that user and updates the state
@@ -42,6 +64,11 @@ class UserList extends Component {
     this.axiosCall(userId);
   }
 
+  handleAddNewPost() {
+    console.log("add new post button clicked");
+    this.setState({ isAddingNewPost: true });
+  }
+
   render() {
     return (
       <>
@@ -64,9 +91,7 @@ class UserList extends Component {
                   <Spin tip="Loading..." size="large" style={{ height: "50%" }}>
                     <div
                       style={{ background: "#f0f2f5", height: 500, margin: 24 }}
-                    >
-                      Loading
-                    </div>
+                    ></div>
                   </Spin>
                 ) : (
                   <List
@@ -74,6 +99,7 @@ class UserList extends Component {
                     dataSource={[this.state.posts]}
                     renderItem={(post) => (
                       <>
+                        <Title level={4}>User posts</Title>
                         <List.Item
                           actions={[
                             <Button type="primary" key="list-loadmore-edit">
@@ -92,6 +118,38 @@ class UserList extends Component {
                           />
                         </List.Item>
                         <Divider></Divider>
+
+                        <Button
+                          type="dashed"
+                          icon={<PlusCircleOutlined />}
+                          style={{ marginBottom: "1rem" }}
+                          onClick={this.handleAddNewPost}
+                        >
+                          Add a new post
+                        </Button>
+                        {this.state.isAddingNewPost && (
+                          <Form name="basic" initialValues={{ remember: true }}>
+                            <Form.Item wrapperCol={{ span: 16 }}>
+                              <Input placeholder="Post Title" />
+                            </Form.Item>
+                            <Form.Item wrapperCol={{ span: 16 }}>
+                              <TextArea rows={4} placeholder="Post Body" />
+                            </Form.Item>
+                            <Form.Item wrapperCol={{ span: 16 }}>
+                              <Button type="dashed" htmlType="submit">
+                                Add
+                              </Button>
+                              <Button
+                                type="dashed"
+                                htmlType="submit"
+                                danger
+                                style={{ marginLeft: "1rem" }}
+                              >
+                                Cancel
+                              </Button>
+                            </Form.Item>
+                          </Form>
+                        )}
                       </>
                     )}
                   />
