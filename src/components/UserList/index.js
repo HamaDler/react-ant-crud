@@ -11,7 +11,7 @@ import {
   Input,
   Typography,
   Form,
-  message,
+  Empty,
 } from "antd";
 import { PlusCircleOutlined } from "@ant-design/icons";
 
@@ -166,7 +166,6 @@ class UserList extends Component {
         <Title level={4} style={{ marginBottom: "2rem" }}>
           User posts
         </Title>
-
         {
           /*  ONLY RENDER POSTS LIST IF USER POSTS HAVE BEEN FETCHED */
           this.state.posts.length !== 0 && (
@@ -260,6 +259,7 @@ class UserList extends Component {
             </Row>
           )
         }
+        {this.state.posts.length === 0 && <Empty />}
       </>
     );
   }
