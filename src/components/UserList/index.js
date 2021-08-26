@@ -9,21 +9,15 @@ import {
   Divider,
   Spin,
   Input,
-  Collapse,
   Typography,
-  Space,
   Form,
 } from "antd";
 import { PlusCircleOutlined } from "@ant-design/icons";
 
-const { Panel } = Collapse;
 const { Option } = Select;
 const { Title } = Typography;
 const { TextArea } = Input;
 
-function callback(key) {
-  console.log(key);
-}
 class UserList extends Component {
   constructor(props) {
     super(props);
@@ -37,6 +31,7 @@ class UserList extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.axiosCall = this.axiosCall.bind(this);
     this.handleAddNewPost = this.handleAddNewPost.bind(this);
+    this.handleCancelNewPost = this.handleCancelNewPost.bind(this);
   }
 
   // Function that takes in User ID, makes an api call to get posts for that user and updates the state
@@ -60,13 +55,14 @@ class UserList extends Component {
   }
 
   handleChange(userId) {
-    console.log(userId);
     this.axiosCall(userId);
   }
 
   handleAddNewPost() {
-    console.log("add new post button clicked");
     this.setState({ isAddingNewPost: true });
+  }
+  handleCancelNewPost() {
+    this.setState({ isAddingNewPost: false });
   }
 
   render() {
@@ -144,6 +140,7 @@ class UserList extends Component {
                                 htmlType="submit"
                                 danger
                                 style={{ marginLeft: "1rem" }}
+                                onClick={this.handleCancelNewPost}
                               >
                                 Cancel
                               </Button>
