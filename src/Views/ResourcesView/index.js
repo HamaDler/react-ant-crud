@@ -56,7 +56,7 @@ export default function index() {
             >
               <List.Item.Meta
                 title={<a href={item.link}>{item.title}</a>}
-                description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+               
               />
             </List.Item>
             <Divider />
